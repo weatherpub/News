@@ -45,8 +45,7 @@ public class DashboardFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        DashboardViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
+        DashboardViewModel dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -98,14 +97,15 @@ public class DashboardFragment extends Fragment {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 
             try {
-                File file = new File(Objects.requireNonNull(getContext()).getFilesDir(), fmt.format(new Date()) + ".txt");
+                File file = new File(Objects.requireNonNull(getContext()).getFilesDir(), fmt.format(new Date()) + "_dashboard.txt");
                 FileWriter fileWriter = new FileWriter(file);
 
+                // Write JSON to disk.
                 BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
                 bufferedWriter.write(result.toString());
                 bufferedWriter.close();
 
-                //  Read file from disk
+                //  Read JSON from disk.
                 FileReader fileReader = new FileReader(file);
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
                 StringBuilder stringBuilder = new StringBuilder();
@@ -118,7 +118,7 @@ public class DashboardFragment extends Fragment {
 
                 bufferedReader.close();
 
-                // This is being populated from disk
+                // Parse JSON from disk
                 JSONObject jsonObject = new JSONObject(stringBuilder.toString());
                 JSONArray obj = jsonObject.getJSONArray("articles");
 

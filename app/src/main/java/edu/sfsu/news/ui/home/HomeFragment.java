@@ -52,7 +52,8 @@ public class HomeFragment extends Fragment {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         String today = fmt.format(new Date());
 
-        final String API = "https://newsapi.org/v2/everything?q=biden&from=" + fmt.format(new Date()) + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
+        // final String API = "https://newsapi.org/v2/everything?q=biden&from=" + fmt.format(new Date()) + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
+        final String API = "https://newsapi.org/v2/everything?q=biden&from=2024-07-07&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
         new AsyncCategory().execute(API);
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
@@ -122,14 +123,15 @@ public class HomeFragment extends Fragment {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 
             try {
-                File file = new File(Objects.requireNonNull(getContext()).getFilesDir(), fmt.format(new Date()) + ".txt");
+                File file = new File(Objects.requireNonNull(getContext()).getFilesDir(), fmt.format(new Date()) + "_home.txt");
                 FileWriter fileWriter = new FileWriter(file);
 
+                //  Write JSON to disk
                 BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
                 bufferedWriter.write(result.toString());
                 bufferedWriter.close();
 
-                //  Read file from disk
+                //  Read JSON from disk
                 FileReader fileReader = new FileReader(file);
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
                 StringBuilder stringBuilder = new StringBuilder();
