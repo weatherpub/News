@@ -1,6 +1,9 @@
 package edu.sfsu.news.code.model;
 
-public class NewsModel {
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
+public class NewsModel extends ViewModel {
     private String name;
     private String author;
     private String title;

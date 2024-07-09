@@ -35,11 +35,12 @@ android {
 }
 
 dependencies {
-
-    implementation(libs.okhttp)
-    implementation(libs.okhttplogging)
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation(libs.okhttp)
+    implementation(libs.okhttplogging)
+    implementation(libs.picasso)
+    implementation(libs.volley)
     implementation(libs.constraintlayout)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
