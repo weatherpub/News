@@ -2,8 +2,7 @@ package edu.sfsu.news.ui.home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.SurfaceTexture;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,11 +29,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 
 import edu.sfsu.news.R;
+import edu.sfsu.news.code.activity.DetailActivity;
 import edu.sfsu.news.code.adapter.RecyclerViewAdapter;
-import edu.sfsu.news.code.helper.OnFragmentInteractionListener;
 import edu.sfsu.news.code.model.NewsModel;
 import edu.sfsu.news.databinding.FragmentHomeBinding;
 import okhttp3.OkHttpClient;
@@ -49,12 +47,28 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Context context;
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-        String today = fmt.format(new Date());
 
-        // final String API = "https://newsapi.org/v2/everything?q=biden&from=" + fmt.format(new Date()) + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
-        final String API = "https://newsapi.org/v2/everything?q=biden&from=2024-07-07&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
-        new AsyncCategory().execute(API);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+
+        final String TOPIC = "biden";
+        final String TODAY = fmt.format(new Date());
+        final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=2024-07-09&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
+        // final String API = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=" + TODAY + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
+        // final String API = "https://newsapi.org/v2/everything?q=" + topic + "&from=" + fmt.format(new Date()) + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
+        /* Sources: Top Headlines
+         * Find sources that display news of this category.
+         * Possible options: business, entertainment, general, health, science, sports, technology.
+         * Default: all categories.
+         *
+         * Categories
+         * business, entertainment, general, health, science, sports, technology
+         *
+         * https://newsapi.org/v2/top-headlines/sources?category=" + category + "&lang=en&country=us&apiKey=6a5b4f0943e447a092cc59f7fbe690ef
+         *
+         * Default - no category defined
+         * https://newsapi.org/v2/top-headlines/sources?lang=en&country=us&apiKey=6a5b4f0943e447a092cc59f7fbe690ef
+         * */
+        new AsyncCategory().execute(URL);
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -66,18 +80,9 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
-/*
-        if(context instanceof OnFragmentInteractionListener) {
-            onFragmentInteractionListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeExecption(context.toString() + "must implement OnFragmentInteractionListener");
-        }
- */
     }
 
     @Override
@@ -86,6 +91,12 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 
+    /**
+     * AsyncCategory makes an HTTP request to an API and returns JSON.
+     * 1. Makes remote call
+     * 2. Downloads to the local directory.
+     * 3. Opens the file to read the json.
+     */
     // Inner Class - There isn't a 'static' keyword.
     public class AsyncCategory extends AsyncTask<String, Void, String> {
 
@@ -123,7 +134,7 @@ public class HomeFragment extends Fragment {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 
             try {
-                File file = new File(Objects.requireNonNull(getContext()).getFilesDir(), fmt.format(new Date()) + "_home.txt");
+                File file = new File(requireContext().getFilesDir(), fmt.format(new Date()) + "_home.txt");
                 FileWriter fileWriter = new FileWriter(file);
 
                 //  Write JSON to disk
@@ -163,8 +174,22 @@ public class HomeFragment extends Fragment {
                 throw new RuntimeException(e);
             }
 
+            RecyclerViewAdapter adapter = new RecyclerViewAdapter(newsModel);
+
+            recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recyclerView.setAdapter(new RecyclerViewAdapter(newsModel));
+
+            // finish working on this section
+
+            adapter.setListener(new RecyclerViewAdapter.Listener() {
+                @Override
+                public void onClick(int position, NewsModel model) {
+                    Intent intent = new Intent(getActivity(), DetailActivity.class);
+                    Log.v("LOG", "onClick intent in HomeFragment was clicked => " + position);
+                    // intent.putExtra(DetailActivity, position);
+                    // getActivity().startActivity(intent);
+                }
+            });
         }
     }
 }

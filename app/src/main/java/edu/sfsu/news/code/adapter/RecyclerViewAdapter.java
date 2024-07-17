@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -22,6 +23,12 @@ import edu.sfsu.news.code.picasso.RoundedTransformation;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     ArrayList<NewsModel> newsModel;
 
+    Listener listener;
+
+    public interface Listener {
+        void onClick(int position, NewsModel model);
+    }
+
     public RecyclerViewAdapter(ArrayList<NewsModel> newsModel) {
         this.newsModel = newsModel;
     }
@@ -31,17 +38,43 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.v("LOG", "onCreateViewHolder()");
+        // View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
         return new ViewHolder(v);
     }
 
+    /*
+     * When a View appears on screen, the Recycler View calls the RecyclerViewAdapter's on BindViewHolder()
+     * method to make the Card View match the details of the list item.
+     */
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, final int position) {
         Log.v("LOG", "onBindViewHolder()");
 
-        NewsModel mod = newsModel.get(position);
-        holder.title.setText(String.format("%s", mod.getTitle()));
-        Picasso.get().load(Uri.parse(mod.getUrlToImage())).resize(200, 150).centerCrop().transform(new RoundedTransformation(10, 0)).into(holder.urlToImage);
+        View itemView = holder.itemView;
+
+        NewsModel item = newsModel.get(position);
+        holder.title.setText(String.format("%s", item.getTitle()));
+
+        Picasso.get().load(Uri.parse(item.getUrlToImage())).resize(200, 150).centerCrop().transform(new RoundedTransformation(10, 0)).into(holder.urlToImage);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(listener != null) {
+                    listener.onClick(position, item);
+                }
+            }
+        });
+
+        /*
+        holder.itemView.setOnClickListener(view -> {
+            if(listener != null) {
+                listener.onClick(position, item);
+            }
+        });
+        */
+
         /*
         holder.name.setText(String.format("%s", mod.getName()));
         holder.author.setText(String.format("%s", mod.getAuthor()));
@@ -57,6 +90,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return newsModel.size();
     }
 
+    public void setListener(Listener listener) {
+        this.listener = listener;
+    }
+
     // Nested Class - This class contains a static keyword.
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView name;
@@ -68,6 +105,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView publishedAt;
         public TextView content;
 
+        //public ViewHolder(@NonNull View itemView) {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
