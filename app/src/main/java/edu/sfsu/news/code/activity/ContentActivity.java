@@ -1,7 +1,6 @@
 package edu.sfsu.news.code.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 
 import edu.sfsu.news.R;
 import edu.sfsu.news.code.model.NewsModel;
-import edu.sfsu.news.code.picasso.RoundedTransformation;
 
 public class ContentActivity extends AppCompatActivity {
 
@@ -31,10 +29,10 @@ public class ContentActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_content);
 
+        Intent intent = getIntent();
+
         TextView receiver_message = (TextView) findViewById(R.id.tv_article_content);
         ImageView imgView = (ImageView) findViewById(R.id.article_image_view);
-
-        Intent intent = getIntent();
 
         // String str_1 = intent.getStringExtra("message_key_1");
         // receiver_message.setText(str_1);

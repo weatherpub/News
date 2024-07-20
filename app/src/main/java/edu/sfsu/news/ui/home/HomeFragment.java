@@ -52,10 +52,10 @@ public class HomeFragment extends Fragment {
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 
-        final String TOPIC = "new york";
+        final String TOPIC = "kamala";
         final String TODAY = fmt.format(new Date());
-        // final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=2024-07-09&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
-        final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=" + TODAY + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
+        final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=2024-07-09&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
+        // final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=" + TODAY + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
         // final String API = "https://newsapi.org/v2/everything?q=" + topic + "&from=" + fmt.format(new Date()) + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
         /* Sources: Top Headlines
          * Find sources that display news of this category.
