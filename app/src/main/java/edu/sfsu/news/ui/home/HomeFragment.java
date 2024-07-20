@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.Async;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import edu.sfsu.news.R;
+import edu.sfsu.news.code.activity.ContentActivity;
 import edu.sfsu.news.code.activity.DetailActivity;
 import edu.sfsu.news.code.adapter.RecyclerViewAdapter;
 import edu.sfsu.news.code.model.NewsModel;
@@ -50,10 +52,10 @@ public class HomeFragment extends Fragment {
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 
-        final String TOPIC = "biden";
+        final String TOPIC = "new york";
         final String TODAY = fmt.format(new Date());
-        final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=2024-07-09&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
-        // final String API = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=" + TODAY + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
+        // final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=2024-07-09&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
+        final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=" + TODAY + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
         // final String API = "https://newsapi.org/v2/everything?q=" + topic + "&from=" + fmt.format(new Date()) + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
         /* Sources: Top Headlines
          * Find sources that display news of this category.
@@ -68,7 +70,13 @@ public class HomeFragment extends Fragment {
          * Default - no category defined
          * https://newsapi.org/v2/top-headlines/sources?lang=en&country=us&apiKey=6a5b4f0943e447a092cc59f7fbe690ef
          * */
+        /* If you specify the AsyncTask.THREAD_POOL_EXECUTOR a new Thread Pool will be created,
+         * sized appropriately for the number of CPU's available on the device,
+         * and your Async Tasks will be executed in parallel.
+         * */
+
         new AsyncCategory().execute(URL);
+        // new AsyncCategory().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -183,11 +191,14 @@ public class HomeFragment extends Fragment {
 
             adapter.setListener(new RecyclerViewAdapter.Listener() {
                 @Override
-                public void onClick(int position, NewsModel model) {
-                    Intent intent = new Intent(getActivity(), DetailActivity.class);
-                    Log.v("LOG", "onClick intent in HomeFragment was clicked => " + position);
-                    // intent.putExtra(DetailActivity, position);
-                    // getActivity().startActivity(intent);
+                public void onClick(int position) {
+                    Intent intent = new Intent(getActivity(), ContentActivity.class);
+                    Log.v("LOG", "[ July 17, 2024 onClick intent in HomeFragment was clicked ] => " + position);
+                    // String content = newsModel.get(position).getContent();
+                    //intent.putExtra("message_key_1", content);
+                    String url = newsModel.get(position).getUrlToImage();
+                    intent.putExtra("image", url);
+                    getActivity().startActivity(intent);
                 }
             });
         }

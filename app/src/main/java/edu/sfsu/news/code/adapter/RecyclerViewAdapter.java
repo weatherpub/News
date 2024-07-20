@@ -25,8 +25,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     Listener listener;
 
+    // Decouple the Adapter with an interface - HFAD 572
     public interface Listener {
-        void onClick(int position, NewsModel model);
+        void onClick(int position);
     }
 
     public RecyclerViewAdapter(ArrayList<NewsModel> newsModel) {
@@ -39,7 +40,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.v("LOG", "onCreateViewHolder()");
         // View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
+        View v = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
+        // CardView v = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
+
         return new ViewHolder(v);
     }
 
@@ -52,6 +55,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Log.v("LOG", "onBindViewHolder()");
 
         View itemView = holder.itemView;
+        // CardView cardView = holder.CardView;
 
         NewsModel item = newsModel.get(position);
         holder.title.setText(String.format("%s", item.getTitle()));
@@ -59,10 +63,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Picasso.get().load(Uri.parse(item.getUrlToImage())).resize(200, 150).centerCrop().transform(new RoundedTransformation(10, 0)).into(holder.urlToImage);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
+        // cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(listener != null) {
-                    listener.onClick(position, item);
+                    listener.onClick(position);
                 }
             }
         });
@@ -105,10 +110,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView publishedAt;
         public TextView content;
 
-        //public ViewHolder(@NonNull View itemView) {
+        // private CardView CardView;
         public ViewHolder(@NonNull View itemView) {
+        // public ViewHolder(@NonNull CardView itemView) {
             super(itemView);
-
             // name = itemView.findViewById(R.id.tv_name);
             // author = itemView.findViewById(R.id.tv_author);
             title = itemView.findViewById(R.id.tv_title);

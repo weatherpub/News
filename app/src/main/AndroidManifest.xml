@@ -5,7 +5,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Request the Foreground Service Permissions -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -17,10 +19,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.News"
         tools:targetApi="31">
+        <activity
+            android:name=".code.activity.ContentActivity"
+            android:exported="false" />
+        <!--
+        <service
+            android:name=".code.service.RemoteService"
+            android:exported="false" />
+        -->
+        <!--
         <service
             android:name=".code.service.ArticleService"
-            android:enabled="true"
-            android:exported="true"></service>
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback|camera|microphone" />
+            -->
 
         <activity
             android:name=".code.activity.DetailActivity"

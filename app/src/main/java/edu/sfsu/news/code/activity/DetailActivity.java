@@ -22,12 +22,15 @@ public class DetailActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityDetailBinding binding;
 
+    public static final String EXTRA_ID = "articleId";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityDetailBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        // binding = ActivityDetailBinding.inflate(getLayoutInflater());
+        // setContentView(binding.getRoot());
+        //setContentView(R.id.activity_detail);
 
         setSupportActionBar(binding.toolbar);
 
