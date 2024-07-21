@@ -152,12 +152,12 @@ public class HomeFragment extends Fragment {
                         File file = new File(requireContext().getFilesDir(), fmt.format(new Date()) + "_home.txt");
                         FileWriter fileWriter = new FileWriter(file);
 
-                        //  Write JSON to disk
+                        // Write JSON response to disk.
                         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
                         bufferedWriter.write(result.toString());
                         bufferedWriter.close();
 
-                        //  Read JSON from disk
+                        // Read JSON response from disk.
                         FileReader fileReader = new FileReader(file);
                         BufferedReader bufferedReader = new BufferedReader(fileReader);
                         StringBuilder stringBuilder = new StringBuilder();
@@ -170,7 +170,7 @@ public class HomeFragment extends Fragment {
 
                         bufferedReader.close();
 
-                        // This is being populated from disk
+                        // This is being populated from disk.
                         JSONObject jsonObject = new JSONObject(stringBuilder.toString());
                         JSONArray obj = jsonObject.getJSONArray("articles");
 
@@ -202,11 +202,9 @@ public class HomeFragment extends Fragment {
                                 public void onClick(int position) {
                                     Intent intent = new Intent(getActivity(), ContentActivity.class);
                                     Log.v("LOG", "[ July 17, 2024 onClick intent in HomeFragment was clicked ] => " + position);
-                                    // String content = newsModel.get(position).getContent();
-                                    //intent.putExtra("message_key_1", content);
                                     String url = newsModel.get(position).getUrlToImage();
                                     intent.putExtra("image", url);
-                                    getActivity().startActivity(intent);
+                                    startActivity(intent);
                                 }
                             });
                         }
