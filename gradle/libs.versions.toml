@@ -1,8 +1,11 @@
 [versions]
-agp = "8.5.0"
+activity = "1.9.0"
+agp = "8.5.1"
 appcompat = "1.7.0"
 constraintlayout = "2.1.4"
 espressoCore = "3.6.1"
+firebaseanalytics = "22.0.2"
+firebase-bom = "33.1.2"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 lifecycleLivedataKtx = "2.8.3"
@@ -11,28 +14,34 @@ material = "1.12.0"
 navigationFragment = "2.7.7"
 navigationUi = "2.7.7"
 okhttp = "4.12.0"
+okhttpbom = "4.12.0"
 picasso = "2.71828"
 volley = "1.2.1"
-activity = "1.9.0"
+googleGmsGoogleServices = "4.4.2"
+firebaseAnalyticsVersion = "22.0.2"
+
+# bom = bill of materials
 
 [libraries]
+activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+firebaseanalytics = { group = "com.google.firebase", name = "firebaseanalytics", version.ref = "firebaseanalytics" }
+firebasebom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
-
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
-#okhttpbom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp" }
 okhttplogging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalyticsVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }

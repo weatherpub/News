@@ -3,18 +3,20 @@ package edu.sfsu.news;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+// import com.google.firebase.analytics.FirebaseAnalytics;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import edu.sfsu.news.code.model.NewsModel;
+// import com.google.firebase.analytics.FirebaseAnalytics;
 import edu.sfsu.news.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+
+  //  private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
         edu.sfsu.news.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+   //     mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
 //        NewsModel newsViewModel = new ViewModelProvider(this).get(NewsModel.class);
 

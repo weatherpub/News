@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.jetbrains.annotations.Async;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +33,6 @@ import java.util.Date;
 
 import edu.sfsu.news.R;
 import edu.sfsu.news.code.activity.ContentActivity;
-import edu.sfsu.news.code.activity.DetailActivity;
 import edu.sfsu.news.code.adapter.RecyclerViewAdapter;
 import edu.sfsu.news.code.model.NewsModel;
 import edu.sfsu.news.databinding.FragmentHomeBinding;
@@ -52,11 +51,11 @@ public class HomeFragment extends Fragment {
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 
-        final String TOPIC = "kamala";
+        final String TOPIC = "biden";
         final String TODAY = fmt.format(new Date());
-        final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=2024-07-09&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
-        // final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=" + TODAY + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
-        // final String API = "https://newsapi.org/v2/everything?q=" + topic + "&from=" + fmt.format(new Date()) + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
+        // final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=2024-07-19&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
+        final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=2024-07-19&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
+        Log.v("LOG", URL);
         /* Sources: Top Headlines
          * Find sources that display news of this category.
          * Possible options: business, entertainment, general, health, science, sports, technology.
@@ -141,66 +140,79 @@ public class HomeFragment extends Fragment {
 
             @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 
-            try {
-                File file = new File(requireContext().getFilesDir(), fmt.format(new Date()) + "_home.txt");
-                FileWriter fileWriter = new FileWriter(file);
+            // background thread to open and parse the downloaded json.
+            final Handler handler = new Handler();
 
-                //  Write JSON to disk
-                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                bufferedWriter.write(result.toString());
-                bufferedWriter.close();
-
-                //  Read JSON from disk
-                FileReader fileReader = new FileReader(file);
-                BufferedReader bufferedReader = new BufferedReader(fileReader);
-                StringBuilder stringBuilder = new StringBuilder();
-                String line = bufferedReader.readLine();
-
-                while(line != null) {
-                    stringBuilder.append(line).append("\n");
-                    line = bufferedReader.readLine();
-                }
-
-                bufferedReader.close();
-
-                // This is being populated from disk
-                JSONObject jsonObject = new JSONObject(stringBuilder.toString());
-                JSONArray obj = jsonObject.getJSONArray("articles");
-
-                for(int i =  0; i < obj.length(); i++) {
-                    newsModel.add(new NewsModel(
-                            obj.getJSONObject(i).getJSONObject("source").getString("name"),
-                            obj.getJSONObject(i).getString("author"),
-                            obj.getJSONObject(i).getString("title"),
-                            obj.getJSONObject(i).getString("description"),
-                            obj.getJSONObject(i).getString("url"),
-                            obj.getJSONObject(i).getString("urlToImage"),
-                            obj.getJSONObject(i).getString("publishedAt"),
-                            obj.getJSONObject(i).getString("content")));
-                }
-            } catch (JSONException | IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            RecyclerViewAdapter adapter = new RecyclerViewAdapter(newsModel);
-
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-            // finish working on this section
-
-            adapter.setListener(new RecyclerViewAdapter.Listener() {
+            new Thread(new Runnable() {
                 @Override
-                public void onClick(int position) {
-                    Intent intent = new Intent(getActivity(), ContentActivity.class);
-                    Log.v("LOG", "[ July 17, 2024 onClick intent in HomeFragment was clicked ] => " + position);
-                    // String content = newsModel.get(position).getContent();
-                    //intent.putExtra("message_key_1", content);
-                    String url = newsModel.get(position).getUrlToImage();
-                    intent.putExtra("image", url);
-                    getActivity().startActivity(intent);
+                public void run() {
+                    Log.v("LOG", "Inside of the new Runnable Thread!");
+
+                    try {
+                        File file = new File(requireContext().getFilesDir(), fmt.format(new Date()) + "_home.txt");
+                        FileWriter fileWriter = new FileWriter(file);
+
+                        //  Write JSON to disk
+                        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                        bufferedWriter.write(result.toString());
+                        bufferedWriter.close();
+
+                        //  Read JSON from disk
+                        FileReader fileReader = new FileReader(file);
+                        BufferedReader bufferedReader = new BufferedReader(fileReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        String line = bufferedReader.readLine();
+
+                        while(line != null) {
+                            stringBuilder.append(line).append("\n");
+                            line = bufferedReader.readLine();
+                        }
+
+                        bufferedReader.close();
+
+                        // This is being populated from disk
+                        JSONObject jsonObject = new JSONObject(stringBuilder.toString());
+                        JSONArray obj = jsonObject.getJSONArray("articles");
+
+                        for(int i =  0; i < obj.length(); i++) {
+                            newsModel.add(new NewsModel(
+                                    obj.getJSONObject(i).getJSONObject("source").getString("name"),
+                                    obj.getJSONObject(i).getString("author"),
+                                    obj.getJSONObject(i).getString("title"),
+                                    obj.getJSONObject(i).getString("description"),
+                                    obj.getJSONObject(i).getString("url"),
+                                    obj.getJSONObject(i).getString("urlToImage"),
+                                    obj.getJSONObject(i).getString("publishedAt"),
+                                    obj.getJSONObject(i).getString("content")));
+                        }
+                    } catch (JSONException | IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    // Handler allows the UI to be updated.
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            RecyclerViewAdapter adapter = new RecyclerViewAdapter(newsModel);
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+                            adapter.setListener(new RecyclerViewAdapter.Listener() {
+                                @Override
+                                public void onClick(int position) {
+                                    Intent intent = new Intent(getActivity(), ContentActivity.class);
+                                    Log.v("LOG", "[ July 17, 2024 onClick intent in HomeFragment was clicked ] => " + position);
+                                    // String content = newsModel.get(position).getContent();
+                                    //intent.putExtra("message_key_1", content);
+                                    String url = newsModel.get(position).getUrlToImage();
+                                    intent.putExtra("image", url);
+                                    getActivity().startActivity(intent);
+                                }
+                            });
+                        }
+                    });
                 }
-            });
+            }).start();
         }
     }
 }
