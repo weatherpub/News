@@ -31,14 +31,14 @@ public class ContentActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        TextView receiver_message = (TextView) findViewById(R.id.tv_article_content);
         ImageView imgView = (ImageView) findViewById(R.id.article_image_view);
-
-        // String str_1 = intent.getStringExtra("message_key_1");
-        // receiver_message.setText(str_1);
+        TextView param_content = (TextView) findViewById(R.id.tv_article_content);
 
         String str_2 = intent.getStringExtra("image");
         Picasso.get().load(str_2).into(imgView);
+
+        String str_1 = intent.getStringExtra("content");
+        param_content.setText(str_1);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

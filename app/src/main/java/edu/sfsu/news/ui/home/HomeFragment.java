@@ -51,10 +51,10 @@ public class HomeFragment extends Fragment {
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 
+        final String DATE = fmt.format(new Date());
         final String TOPIC = "biden";
-        final String TODAY = fmt.format(new Date());
         // final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=2024-07-19&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
-        final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=2024-07-19&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
+        final String URL = "https://newsapi.org/v2/everything?q=" + TOPIC + "&from=" + DATE + "&sortBy=popularity&language=en&apiKey=6a5b4f0943e447a092cc59f7fbe690ef";
         Log.v("LOG", URL);
         /* Sources: Top Headlines
          * Find sources that display news of this category.
@@ -203,7 +203,9 @@ public class HomeFragment extends Fragment {
                                     Intent intent = new Intent(getActivity(), ContentActivity.class);
                                     Log.v("LOG", "[ July 17, 2024 onClick intent in HomeFragment was clicked ] => " + position);
                                     String url = newsModel.get(position).getUrlToImage();
+                                    String content = newsModel.get(position).getContent();
                                     intent.putExtra("image", url);
+                                    intent.putExtra("content", content);
                                     startActivity(intent);
                                 }
                             });
