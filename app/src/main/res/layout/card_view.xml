@@ -2,15 +2,15 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:padding="12dp"
+    android:padding="6dp"
     android:background="@color/black"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="300dp"
-            card_view:cardBackgroundColor="@color/purple_500"
+            android:maxHeight="350dp"
+            card_view:cardBackgroundColor="#269"
             card_view:cardElevation="4dp"
             card_view:cardCornerRadius="4dp"
             card_view:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,6 @@
                             android:layout_width="wrap_content"
                             android:contentDescription="@string/message"
                             android:scaleType="fitStart" />
-
                         <TextView
                             android:id="@+id/tv_title"
                             style="@style/TextAppearance.MaterialComponents.Subtitle1"
