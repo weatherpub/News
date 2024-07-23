@@ -209,6 +209,7 @@ public class HomeFragment extends Fragment {
                                     Log.v("LOG", "[ July 17, 2024 onClick intent in HomeFragment was clicked ] => " + position);
                                     String url = newsModel.get(position).getUrlToImage();
                                     String content = newsModel.get(position).getContent();
+
                                     intent.putExtra("image", url);
                                     intent.putExtra("content", content);
                                     startActivity(intent);
